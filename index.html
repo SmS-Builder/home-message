@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Home Message</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f2f2f2;
+    text-align: center;
+    padding: 30px;
+}
+
+.container {
+    max-width: 400px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+h1 {
+    margin-bottom: 25px;
+}
+
+textarea {
+    width: 100%;
+    height: 120px;
+    font-size: 18px;
+    padding: 12px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid #aaa;
+    resize: none;
+}
+
+button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 15px;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    background: #2196F3;
+    color: white;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+#status {
+    margin-top: 15px;
+    font-size: 16px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🏠 Home Message</h1>
+
+<textarea
+    id="message"
+    placeholder="Type your message..."
+></textarea>
+
+<button onclick="sendMessage()">
+    SEND
+</button>
+
+<div id="status"></div>
+
+</div>
+
+
+<script>
+
+const SERVER_URL =
+"https://script.google.com/macros/s/AKfycbyBBAkJ6Oqti_ODdVTvzQ5HCxb0EZ1-RMsNAKBEP4ci2EWRPBW3fUFtSXmRhkCDvaA5Cg/exec";
+
+
+function sendMessage()
+{
+    const message =
+        document.getElementById("message").value.trim();
+
+    if (message === "")
+    {
+        document.getElementById("status").innerText =
+            "Please type a message.";
+
+        return;
+    }
+
+    document.getElementById("status").innerText =
+        "Sending...";
+
+
+    const url =
+        SERVER_URL +
+        "?action=send&msg=" +
+        encodeURIComponent(message);
+
+
+    fetch(url)
+
+    .then(response => response.text())
+
+    .then(data => {
+
+        if (data === "OK")
+        {
+            document.getElementById("status").innerText =
+                "✓ Message sent!";
+
+            document.getElementById("message").value = "";
+        }
+        else
+        {
+            document.getElementById("status").innerText =
+                "Server error.";
+        }
+
+    })
+
+    .catch(error => {
+
+        document.getElementById("status").innerText =
+            "Connection error.";
+
+        console.log(error);
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
